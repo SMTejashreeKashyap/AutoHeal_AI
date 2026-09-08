@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoHeal-AI | Teaching AI to Fix Itself</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <!-- Chart.js for beautiful interactive visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <!-- Header & Navigation -->
+    <header>
+        <div class="header-container">
+            <div class="brand-logo">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                </svg>
+                <div>
+                    <h1 class="brand-title">AutoHeal-AI</h1>
+                    <div class="brand-subtitle">Teaching AI to Fix Itself • Autonomous MLOps Engine</div>
+                </div>
+            </div>
+
+            <nav class="nav-links">
+                <button class="nav-btn active" data-tab="tab-dashboard">Dashboard</button>
+                <button class="nav-btn" data-tab="tab-chaos">Chaos Lab</button>
+                <button class="nav-btn" data-tab="tab-scanner">Diagnostic Scanner</button>
+                <button class="nav-btn" data-tab="tab-heal">Self-Healing Studio</button>
+                <button class="nav-btn" data-tab="tab-inference">Inference & Audit</button>
+            </nav>
+
+            <div>
+                <span id="systemStatusBadge" class="badge badge-healthy">Status: Healthy</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main>
+
+        <!-- Top Banner Callout -->
+        <div class="banner">
+            <div class="banner-content">
+                <h2>Autonomous Model Reliability & Self-Healing Pipeline</h2>
+                <p>Monitors production data for corrupted labels, outliers, demographic bias, and feature drift. Formulates an automated remediation plan, cleanses datasets, calibrates fair thresholds, and retrains models with zero-downtime canary verification.</p>
+            </div>
+            <button id="btnTriggerHealBanner" class="btn btn-primary btn-lg">Run Self-Healing</button>
+        </div>
+
+        <!-- TAB 1: DASHBOARD COCKPIT -->
+        <div id="tab-dashboard" class="tab-content active">
+            <div class="grid-4">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Champion Model</span>
+                        <span class="badge badge-healthy">Active</span>
+                    </div>
+                    <div id="statChampVersion" class="stat-value" style="font-size:1.2rem; color:var(--accent-cyan);">v1_baseline</div>
+                    <div class="stat-desc">Production serving candidate</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Model F1-Score</span>
+                        <span class="badge badge-healthy">Predictive</span>
+                    </div>
+                    <div id="statChampF1" class="stat-value">--</div>
+                    <div class="stat-desc">Harmonic balance of precision & recall</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Model Accuracy</span>
+                        <span class="badge badge-healthy">Accuracy</span>
+                    </div>
+                    <div id="statChampAcc" class="stat-value">--</div>
+                    <div class="stat-desc">Overall classification performance</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Spotted Anomalies</span>
+                        <span class="badge badge-degraded">Telemetry</span>
+                    </div>
+                    <div id="statTotalFindings" class="stat-value" style="color:var(--accent-rose);">0</div>
+                    <div class="stat-desc">Active data, bias, or drift issues</div>
+                </div>
+            </div>
+
+            <!-- Dashboard Charts -->
+            <div class="grid-3">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Data Error Breakdown</span>
+                        <span id="countDataErrors" class="badge">0</span>
+                    </div>
+                    <div style="height: 220px;">
+                        <canvas id="chartDataErrors"></canvas>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Demographic Fairness Rate</span>
+                        <span id="countBiasFindings" class="badge">0</span>
+                    </div>
+                    <div style="height: 220px;">
+                        <canvas id="chartBias"></canvas>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Covariate Drift (PSI)</span>
+                        <span id="countDriftFindings" class="badge">0</span>
+                    </div>
+                    <div style="height: 220px;">
+                        <canvas id="chartDrift"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: CHAOS SIMULATOR LAB -->
+        <div id="tab-chaos" class="tab-content">
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Perturbation Controls (Chaos Injector)</span>
+                    </div>
+                    <p style="color:var(--text-secondary); font-size:0.875rem; margin-bottom:1.5rem;">
+                        Simulate real-world production failures by injecting corrupted labels, missing fields, demographic bias, and macroeconomic covariate drift into the incoming stream.
+                    </p>
+
+                    <div class="form-group">
+                        <div class="form-label">
+                            <span>Missing Data Ratio</span>
+                            <span id="valMissing" style="color:var(--accent-amber); font-weight:700;">15%</span>
+                        </div>
+                        <input id="sliderMissing" type="range" min="0" max="0.40" step="0.01" value="0.15" class="form-range">
+                    </div>
+
+                    <div class="form-group">
+                        <div class="form-label">
+                            <span>Extreme Outliers Ratio</span>
+                            <span id="valOutliers" style="color:var(--accent-amber); font-weight:700;">5%</span>
+                        </div>
+                        <input id="sliderOutliers" type="range" min="0" max="0.15" step="0.01" value="0.05" class="form-range">
+                    </div>
+
+                    <div class="form-group">
+                        <div class="form-label">
+                            <span>Label Noise / Flipping Rate</span>
+                            <span id="valLabelNoise" style="color:var(--accent-rose); font-weight:700;">10%</span>
+                        </div>
+                        <input id="sliderLabelNoise" type="range" min="0" max="0.25" step="0.01" value="0.10" class="form-range">
+                    </div>
+
+                    <div class="form-group">
+                        <div class="form-label">
+                            <span>Demographic Bias Penalty (Female)</span>
+                            <span id="valBias" style="color:var(--accent-rose); font-weight:700;">45%</span>
+                        </div>
+                        <input id="sliderBias" type="range" min="0" max="0.60" step="0.01" value="0.45" class="form-range">
+                    </div>
+
+                    <div class="form-group">
+                        <div class="form-label">
+                            <span>Macroeconomic Covariate Drift</span>
+                            <span id="valDrift" style="color:var(--accent-purple); font-weight:700;">35%</span>
+                        </div>
+                        <input id="sliderDrift" type="range" min="0" max="0.60" step="0.01" value="0.35" class="form-range">
+                    </div>
+
+                    <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                        <button id="btnInjectChaos" class="btn btn-danger">Inject Chaos Perturbations</button>
+                        <button id="btnResetChaos" class="btn btn-secondary">Reset to Pristine Stream</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Theoretical Failure Explanations</span>
+                    </div>
+                    <div style="font-size:0.875rem; color:var(--text-secondary); line-height:1.6;">
+                        <h4 style="color:#fff; margin:0.75rem 0 0.25rem;">1. Data Errors (Corrupted Inputs & Labels)</h4>
+                        <p>Null values disrupt feature representations; extreme out-of-distribution values distort gradients; mislabeled instances confuse decision boundaries.</p>
+
+                        <h4 style="color:#fff; margin:1rem 0 0.25rem;">2. Algorithmic Bias (Fairness Violation)</h4>
+                        <p>When unprivileged demographic groups suffer lower approval rates, the model violates the US EEOC 80% Four-Fifths rule, creating discriminatory disparate impact.</p>
+
+                        <h4 style="color:#fff; margin:1rem 0 0.25rem;">3. Covariate & Concept Drift</h4>
+                        <p>Macroeconomic shifts alter input feature distributions (Covariate Shift) or changing consumer dynamics shift $P(Y|X)$ (Concept Drift), rendering existing models obsolete.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: DIAGNOSTIC SCANNER -->
+        <div id="tab-scanner" class="tab-content">
+            <div class="card" style="margin-bottom: 1.5rem;">
+                <div class="card-header">
+                    <span class="card-title">Real-Time Diagnostic Inspection Log</span>
+                    <button id="btnRunDiagnostics" class="btn btn-secondary">Rescan Stream</button>
+                </div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Severity</th>
+                                <th>Issue Type</th>
+                                <th>Affected Target</th>
+                                <th>Observed vs Threshold</th>
+                                <th>Diagnostic Root Cause</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableFindingsBody">
+                            <tr><td colspan="5" style="text-align:center;">Loading diagnostic telemetry...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 4: SELF-HEALING STUDIO -->
+        <div id="tab-heal" class="tab-content">
+            <div class="card" style="margin-bottom: 1.5rem;">
+                <div class="card-header">
+                    <span class="card-title">Autonomous Self-Healing Feedback Loop</span>
+                    <button id="btnTriggerHeal" class="btn btn-success btn-lg">Run Autonomous Self-Healing</button>
+                </div>
+                <p style="color:var(--text-secondary); font-size:0.875rem;">
+                    Watch the AI system autonomously formulate a remediation plan, cleanse data, balance fairness weights, recalibrate demographic decision thresholds, and retrain the model.
+                </p>
+
+                <!-- Step Tracker Flow -->
+                <div id="healingFlowContainer" style="margin-top:2rem;">
+                    <div class="pipeline-flow">
+                        <div class="step-node completed">
+                            <div class="step-icon">1</div>
+                            <div class="step-title">Diagnose</div>
+                        </div>
+                        <div class="step-node">
+                            <div class="step-icon">2</div>
+                            <div class="step-title">Clean Data</div>
+                        </div>
+                        <div class="step-node">
+                            <div class="step-icon">3</div>
+                            <div class="step-title">Reweight Bias</div>
+                        </div>
+                        <div class="step-node">
+                            <div class="step-icon">4</div>
+                            <div class="step-title">Fair Thresholds</div>
+                        </div>
+                        <div class="step-node">
+                            <div class="step-icon">5</div>
+                            <div class="step-title">Retrain Model</div>
+                        </div>
+                        <div class="step-node">
+                            <div class="step-icon">6</div>
+                            <div class="step-title">Canary Gate</div>
+                        </div>
+                        <div class="step-node">
+                            <div class="step-icon">7</div>
+                            <div class="step-title">Promote Champion</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="healResultBanner" style="display:none;"></div>
+            </div>
+
+            <!-- Before vs After Metrics Comparison -->
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Before vs After Performance & Fairness</span>
+                    </div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Metric</th>
+                                    <th>Before (Degraded)</th>
+                                    <th>After (Healed)</th>
+                                    <th>Delta</th>
+                                    <th>Verdict</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableComparisonBody">
+                                <tr><td colspan="5" style="text-align:center; color:#9ca3af;">Click "Run Autonomous Self-Healing" to generate verification metrics.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Impact Comparison Visualizer</span>
+                    </div>
+                    <div style="height: 260px;">
+                        <canvas id="chartComparison"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Remediation Actions Log -->
+            <div class="card" style="margin-top:1.5rem;">
+                <div class="card-header">
+                    <span class="card-title">Executed Remediation Actions Log</span>
+                </div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Step ID</th>
+                                <th>Action Type</th>
+                                <th>Target Component</th>
+                                <th>Mathematical Fix / Result</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableRemediationPlanBody">
+                            <tr><td colspan="4" style="text-align:center; color:#9ca3af;">No healing cycles run yet.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 5: INFERENCE & AUDIT REPORT -->
+        <div id="tab-inference" class="tab-content">
+            <div class="grid-2">
+                <!-- Live Borrower Evaluation Form -->
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Live Borrower Inference Sandbox</span>
+                    </div>
+                    <form id="formPredict">
+                        <div class="form-group">
+                            <label class="form-label">Annual Income ($)</label>
+                            <input id="infIncome" type="number" class="form-input" value="68000">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Credit Score (300 - 850)</label>
+                            <input id="infCreditScore" type="number" class="form-input" value="690">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Debt-to-Income Ratio (0.05 - 0.60)</label>
+                            <input id="infDTI" type="number" step="0.01" class="form-input" value="0.26">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Loan Amount Requested ($)</label>
+                            <input id="infLoanAmount" type="number" class="form-input" value="22000">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Employment Duration (Years)</label>
+                            <input id="infEmpLength" type="number" step="0.5" class="form-input" value="5.5">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Savings Balance ($)</label>
+                            <input id="infSavings" type="number" class="form-input" value="18000">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Gender (Sensitive Attribute)</label>
+                            <select id="infGender" class="form-select">
+                                <option value="Female" selected>Female (Unprivileged)</option>
+                                <option value="Male">Male (Privileged)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Age Group</label>
+                            <select id="infAgeGroup" class="form-select">
+                                <option value="Young">Young</option>
+                                <option value="Middle-Aged" selected>Middle-Aged</option>
+                                <option value="Senior">Senior</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width:100%;">Evaluate Loan Application</button>
+                    </form>
+
+                    <div id="inferenceResultCard" style="margin-top:1.25rem; display:none;"></div>
+                </div>
+
+                <!-- Incident Audit Report & Project Summary -->
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Academic & Incident Audit Report</span>
+                        <button id="btnDownloadReport" class="btn btn-secondary">Download Markdown Report</button>
+                    </div>
+                    <p style="color:var(--text-secondary); font-size:0.875rem; margin-bottom:1rem;">
+                        Export full documentation of the autonomous self-healing cycle, including detected findings, mathematical interventions, and before-vs-after verification proofs.
+                    </p>
+                    <div style="background:#0d121f; border:1px solid var(--border-color); border-radius:0.5rem; padding:1rem; font-size:0.8rem; color:#9ca3af; max-height:420px; overflow-y:auto; font-family:monospace;">
+                        <h4 style="color:#fff; margin-bottom:0.5rem;">Sample Incident Report Structure</h4>
+                        <pre>
+# AutoHeal-AI Incident & Self-Healing Audit Report
+Cycle ID: HEAL_20260906_180000 | Status: HEALED_AND_PROMOTED
+
+## 1. Executive Summary
+Successfully diagnosed 14 issues. Executed 6 autonomous corrective actions.
+Promoted healed model as new Champion with F1=0.822 and restored fairness.
+
+## 2. Diagnostic Findings
+- Missing Values: debt_to_income (9.8%), savings_balance (9.6%)
+- Schema Violations: Out-of-bounds income and credit scores
+- Outliers: IQR statistical anomalies flagged
+- Bias: Equalized Odds TPR/FPR gap (15.0%)
+- Drift: KS-test & PSI drift on debt_to_income and credit_score
+
+## 3. Autonomous Remediation Actions
+1. KNN Imputation of null fields
+2. Quantile clipping / winsorization of outliers
+3. Confident pruning of corrupted labels
+4. Kamiran-Calders fair sample reweighting
+5. Optimal fair threshold calibration (Female: 0.40)
+6. Continuous gradient boosting model retrain
+7. Canary safety gate verification & auto-promotion
+                        </pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>AutoHeal-AI: Teaching AI to Fix Itself • Computer Science Capstone Project • Powered by FastAPI & Scikit-Learn</p>
+    </footer>
+
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
